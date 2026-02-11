@@ -1,0 +1,64 @@
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Temporary Files
+*.tmp
+*.bak
+*.log
+*.cache
+temp/
+tmp/
+
+# Git
+*.orig
+
+# Development & Testing
+test-output/
+.test-data/
+scratch/
+
+# Personal Notes (not for sharing)
+PRIVATE.md
+NOTES.md
+TODO.md
+personal/
+
+# Build artifacts (if any skills generate them)
+dist/
+build/
+out/
+
+# Dependencies (if any skills need them)
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Archive/WIP skills not ready for sharing
+_archive/
+_wip/
+_draft/
