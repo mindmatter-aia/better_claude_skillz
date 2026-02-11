@@ -51,6 +51,8 @@ xcopy /E /I optimize-context C:\Users\<username>\.claude\skills\optimize-context
 
 ### 2. Update `/prime` Skill (REQUIRED)
 
+**Note:** The `/prime` skill is part of Cole Medin's PIV Loop methodology. This integration extends `/prime` with `.claudeignore` support.
+
 The skill needs an updated `/prime` that reads `.claudeignore`. Add this section to your `~/.claude/skills/prime/SKILL.md` after the frontmatter (before "Check $ARGUMENTS"):
 
 ```markdown
@@ -340,8 +342,13 @@ This skill is part of the Everything Claude Code methodology and is provided as-
 ## Credits
 
 **Created by:** wlis-dev-env AI Development Workflow
-**Based on:** Cole Medin's PIV Loop + Affaan Mustafa's Everything Claude Code
 **Date:** February 10, 2026
+
+**Integrates with:**
+- [`/prime` skill](https://github.com/coleam00) by Cole Medin — Part of the PIV Loop methodology
+- Everything Claude Code by Affaan Mustafa
+
+**Note:** This skill extends Cole Medin's `/prime` skill with `.claudeignore` support for context optimization. The original `/prime` skill and PIV Loop methodology were created by Cole Medin.
 
 ---
 

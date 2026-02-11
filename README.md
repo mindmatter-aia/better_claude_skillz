@@ -126,7 +126,7 @@ After installation, skills are available as slash commands in Claude Code:
 ### Integration with Other Skills
 
 Many skills work together:
-- Use `/optimize-context` before `/prime` for efficient context loading
+- Use `/optimize-context` before `/prime` for efficient context loading (Note: `/prime` is part of [Cole Medin's PIV Loop](https://github.com/coleam00))
 - Use `/learn` to extract patterns from your workflow
 - Use `/evolve` to cluster patterns into new skills
 

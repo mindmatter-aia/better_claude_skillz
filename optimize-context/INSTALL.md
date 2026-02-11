@@ -43,6 +43,8 @@ New-Item -ItemType SymbolicLink -Path "C:\Users\$env:USERNAME\.claude\skills\opt
 
 **CRITICAL:** The `/optimize-context` skill requires an updated `/prime` skill to function.
 
+**Note:** The `/prime` skill is part of [Cole Medin's PIV Loop methodology](https://github.com/coleam00). This integration extends `/prime` with `.claudeignore` support.
+
 ### 1. Locate Your `/prime` Skill
 
 ```bash
