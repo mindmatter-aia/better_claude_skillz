@@ -341,7 +341,7 @@ This skill is part of the Everything Claude Code methodology and is provided as-
 
 ## Credits
 
-**Created by:** wlis-dev-env AI Development Workflow
+**Author:** Nick Martin, [PatriotAgentic LLC](https://github.com/mindmatter-aia)
 **Date:** February 10, 2026
 
 **Integrates with:**
@@ -352,4 +352,4 @@ This skill is part of the Everything Claude Code methodology and is provided as-
 
 ---
 
-**Need help?** Open an issue in your team's Claude Code skills repository.
+**License:** MIT
