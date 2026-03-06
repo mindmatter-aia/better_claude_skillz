@@ -1,245 +1,282 @@
-# Shared Skillz — Claude Code Skills Repository
+# Shared Skillz -- Claude Code Toolkit
 
-A curated collection of high-quality Claude Code skills for sharing across teams and projects.
+A curated collection of commands, agents, and skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), Anthropic's official CLI for Claude.
 
-## 📚 Available Skills
-
-### [`/optimize-context`](optimize-context/) — Smart Context Exclusion
-
-**Version:** 1.0.0
-**Status:** ✅ Production Ready
-
-Intelligently manage which files are loaded during `/prime` context gathering, saving 20-50% of tokens while keeping all files accessible.
-
-**Key Features:**
-- Three-layer file exclusion model (Hard Block, Noise Filter, Soft Skip)
-- Three operating modes: create, analyze, sync
-- Automatic project scanning for large files and low-signal patterns
-- 15K-115K token savings per `/prime` run
-- Cross-platform support (Linux, macOS, Windows)
-
-**Quick Start:**
-```bash
-# Install
-cp -r optimize-context ~/.claude/skills/
-
-# Use
-/optimize-context create
-```
-
-[📖 Full Documentation](optimize-context/README.md) | [⚡ Quick Install](optimize-context/INSTALL.md)
+**Total items:** 64 (8 commands + 13 agents + 43 skills)
 
 ---
 
-## 🚀 Installation
+## Table of Contents
 
-### Quick Install (All Skills)
+- [Commands](#commands) (8)
+- [Agents](#agents) (13)
+- [Skills](#skills) (43)
+- [Installation](#installation)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Commands
+
+Slash commands that invoke specific workflows in Claude Code.
+
+| Command | Description |
+|---------|-------------|
+| [`/challenge`](commands/challenge/) | Quality gate that pressure-tests any work before shipping |
+| [`/go-build`](commands/go-build/) | Fix Go build errors, vet warnings, and linter issues incrementally |
+| [`/go-review`](commands/go-review/) | Comprehensive Go code review for idiomatic patterns and security |
+| [`/go-test`](commands/go-test/) | Enforce TDD workflow for Go with table-driven tests |
+| [`/plan`](commands/plan/) | Create step-by-step implementation plan before writing code |
+| [`/prime-full`](commands/prime-full/) | Load comprehensive project context (85K+ tokens) |
+| [`/prime-quick`](commands/prime-quick/) | Load essential project context quickly (35-40K tokens) |
+| [`/stats`](commands/stats/) | Display session statistics, context usage, and system info |
+
+---
+
+## Agents
+
+Specialized subagents that handle complex tasks autonomously.
+
+### Code Quality
+
+| Agent | Description | Tools | Model |
+|-------|-------------|-------|-------|
+| [`code-reviewer`](agents/code-reviewer/) | Expert code review for quality, security, and maintainability | Read, Grep, Glob, Bash | opus |
+| [`go-reviewer`](agents/go-reviewer/) | Go-specific code review for idiomatic patterns and concurrency | Read, Grep, Glob, Bash | opus |
+| [`python-reviewer`](agents/python-reviewer/) | Python code review for PEP 8, type hints, security | Read, Grep, Glob, Bash | opus |
+| [`refactor-cleaner`](agents/refactor-cleaner/) | Dead code cleanup and consolidation | Read, Write, Edit, Bash, Grep, Glob | opus |
+
+### Architecture and Planning
+
+| Agent | Description | Tools | Model |
+|-------|-------------|-------|-------|
+| [`architect`](agents/architect/) | System design, scalability, and architectural decisions | Read, Grep, Glob | opus |
+| [`planner`](agents/planner/) | Implementation planning for complex features | Read, Grep, Glob | opus |
+
+### Build and Fix
+
+| Agent | Description | Tools | Model |
+|-------|-------------|-------|-------|
+| [`build-error-resolver`](agents/build-error-resolver/) | Fix TypeScript and build errors with minimal diffs | Read, Write, Edit, Bash, Grep, Glob | opus |
+| [`go-build-resolver`](agents/go-build-resolver/) | Fix Go build errors, vet issues, and linter warnings | Read, Write, Edit, Bash, Grep, Glob | opus |
+
+### Testing
+
+| Agent | Description | Tools | Model |
+|-------|-------------|-------|-------|
+| [`tdd-guide`](agents/tdd-guide/) | Test-driven development enforcing write-tests-first methodology | Read, Write, Edit, Bash, Grep | opus |
+| [`e2e-runner`](agents/e2e-runner/) | End-to-end testing with Playwright and artifact management | Read, Write, Edit, Bash, Grep, Glob | opus |
+
+### Security and Database
+
+| Agent | Description | Tools | Model |
+|-------|-------------|-------|-------|
+| [`security-reviewer`](agents/security-reviewer/) | Vulnerability detection and OWASP Top 10 analysis | Read, Write, Edit, Bash, Grep, Glob | opus |
+| [`database-reviewer`](agents/database-reviewer/) | PostgreSQL query optimization, schema design, and RLS | Read, Write, Edit, Bash, Grep, Glob | opus |
+
+### Documentation
+
+| Agent | Description | Tools | Model |
+|-------|-------------|-------|-------|
+| [`doc-updater`](agents/doc-updater/) | Codemap generation and documentation maintenance | Read, Write, Edit, Bash, Grep, Glob | opus |
+
+---
+
+## Skills
+
+Reusable workflow patterns activated as slash commands.
+
+### Planning and Execution
+
+| Skill | Description |
+|-------|-------------|
+| [`/plan-ecc`](skills/plan-ecc/) | Restate requirements, assess risks, create implementation plan |
+| [`/plan-feature`](skills/plan-feature/) | Comprehensive feature planning with deep codebase analysis |
+| [`/execute`](skills/execute/) | Execute an implementation plan |
+| [`/execution-report`](skills/execution-report/) | Document what was implemented vs planned |
+| [`/orchestrate`](skills/orchestrate/) | Sequential agent workflow for complex tasks |
+| [`/system-review`](skills/system-review/) | Analyze implementation against plan for process improvements |
+
+### Code Quality and Review
+
+| Skill | Description |
+|-------|-------------|
+| [`/code-review`](skills/code-review/) | Technical code review that runs pre-commit |
+| [`/code-review-ecc`](skills/code-review-ecc/) | Comprehensive security and quality review of uncommitted changes |
+| [`/coding-standards`](skills/coding-standards/) | Universal coding standards for TypeScript, JavaScript, React, Node.js |
+| [`/refactor-clean`](skills/refactor-clean/) | Safely identify and remove dead code with test verification |
+
+### Testing
+
+| Skill | Description |
+|-------|-------------|
+| [`/tdd`](skills/tdd/) | Enforce test-driven development workflow |
+| [`/tdd-workflow`](skills/tdd-workflow/) | TDD with 80%+ coverage including unit, integration, and E2E |
+| [`/e2e`](skills/e2e/) | Generate and run end-to-end tests with Playwright |
+| [`/test-coverage`](skills/test-coverage/) | Analyze coverage and generate missing tests to reach 80%+ |
+| [`/golang-testing`](skills/golang-testing/) | Go testing patterns: table-driven tests, benchmarks, fuzzing |
+| [`/python-testing`](skills/python-testing/) | Python testing with pytest, TDD, fixtures, mocking |
+
+### Language Patterns
+
+| Skill | Description |
+|-------|-------------|
+| [`/frontend-patterns`](skills/frontend-patterns/) | React, Next.js, state management, and performance patterns |
+| [`/backend-patterns`](skills/backend-patterns/) | API design, database optimization, and server-side patterns |
+| [`/golang-patterns`](skills/golang-patterns/) | Idiomatic Go patterns, concurrency, and best practices |
+| [`/python-patterns`](skills/python-patterns/) | Pythonic idioms, PEP 8, type hints, and best practices |
+| [`/postgres-patterns`](skills/postgres-patterns/) | PostgreSQL query optimization, schema design, and indexing |
+
+### Security
+
+| Skill | Description |
+|-------|-------------|
+| [`/security-review`](skills/security-review/) | Comprehensive security checklist and vulnerability patterns |
+
+### Context and Documentation
+
+| Skill | Description |
+|-------|-------------|
+| [`/prime`](skills/prime/) | Load project context at session start |
+| [`/optimize-context`](optimize-context/) | Smart file exclusion for efficient context loading |
+| [`/update-codemaps`](skills/update-codemaps/) | Analyze codebase and update architecture documentation |
+| [`/update-docs`](skills/update-docs/) | Sync documentation from source-of-truth files |
+| [`/checkpoint`](skills/checkpoint/) | Save current session state for safe rollback |
+| [`/strategic-compact`](skills/strategic-compact/) | Context compaction at logical intervals |
+| [`/iterative-retrieval`](skills/iterative-retrieval/) | Progressive context retrieval for multi-agent workflows |
+| [`/create-prd`](skills/create-prd/) | Create Product Requirements Document from conversation |
+
+### Continuous Learning
+
+| Skill | Description |
+|-------|-------------|
+| [`/continuous-learning-v2`](skills/continuous-learning-v2/) | Instinct-based learning system with confidence scoring |
+| [`/learn`](skills/learn/) | Extract reusable patterns from current session |
+| [`/evolve`](skills/evolve/) | Cluster related instincts into skills, commands, or agents |
+| [`/instinct-status`](skills/instinct-status/) | Show all learned instincts with confidence levels |
+| [`/instinct-export`](skills/instinct-export/) | Export instincts for sharing |
+| [`/instinct-import`](skills/instinct-import/) | Import instincts from other sources |
+| [`/skill-create`](skills/skill-create/) | Generate SKILL.md files from local git history |
+
+### Evaluation and Verification
+
+| Skill | Description |
+|-------|-------------|
+| [`/eval`](skills/eval/) | Eval-driven development workflow |
+| [`/eval-harness`](skills/eval-harness/) | Formal evaluation framework for Claude Code sessions |
+| [`/validate`](skills/validate/) | Run project-specific validation suite |
+| [`/verify`](skills/verify/) | Comprehensive verification on current codebase state |
+
+### Bug Fixing
+
+| Skill | Description |
+|-------|-------------|
+| [`/rca`](skills/rca/) | Root cause analysis for bugs |
+| [`/implement-fix`](skills/implement-fix/) | Implement bug fix based on RCA |
+
+### Python Review
+
+| Skill | Description |
+|-------|-------------|
+| [`/python-review`](skills/python-review/) | Python code review for PEP 8, type hints, security, idioms |
+
+---
+
+## Installation
+
+### Install Everything
 
 **Linux/macOS:**
 ```bash
-# Clone the repository
 git clone https://github.com/mindmatter-aia/shared_skillz.git
 cd shared_skillz
 
-# Copy all skills to your Claude Code directory
-cp -r */ ~/.claude/skills/
+# Commands
+cp commands/*/*.md ~/.claude/commands/
+
+# Agents
+for dir in agents/*/; do
+  cp "$dir"/*.md ~/.claude/agents/
+done
+
+# Skills
+for dir in skills/*/; do
+  name=$(basename "$dir")
+  mkdir -p ~/.claude/skills/"$name"
+  cp "$dir"/*.md ~/.claude/skills/"$name"/
+done
+
+# optimize-context (special structure)
+cp -r optimize-context ~/.claude/skills/
 ```
 
 **Windows PowerShell:**
 ```powershell
-# Clone the repository
 git clone https://github.com/mindmatter-aia/shared_skillz.git
 cd shared_skillz
 
-# Copy all skills to your Claude Code directory
-Get-ChildItem -Directory | ForEach-Object {
-    Copy-Item -Recurse -Force $_.FullName "C:\Users\$env:USERNAME\.claude\skills\$($_.Name)"
+# Commands
+Get-ChildItem commands\*\*.md | ForEach-Object {
+    Copy-Item $_.FullName "$env:USERPROFILE\.claude\commands\"
 }
+
+# Agents
+Get-ChildItem agents\*\*.md | Where-Object { $_.Name -ne "README.md" } | ForEach-Object {
+    Copy-Item $_.FullName "$env:USERPROFILE\.claude\agents\"
+}
+
+# Skills
+Get-ChildItem -Directory skills\* | ForEach-Object {
+    $dest = "$env:USERPROFILE\.claude\skills\$($_.Name)"
+    New-Item -ItemType Directory -Force -Path $dest | Out-Null
+    Copy-Item "$($_.FullName)\*.md" $dest
+}
+
+# optimize-context
+Copy-Item -Recurse optimize-context "$env:USERPROFILE\.claude\skills\"
 ```
 
-### Install Individual Skills
+### Install Individual Items
 
-Each skill has its own installation guide:
-- [`/optimize-context` Installation](optimize-context/INSTALL.md)
-
----
-
-## 📋 Skill Quality Standards
-
-All skills in this repository meet these quality criteria:
-
-✅ **Complete Documentation**
-- Comprehensive README with usage examples
-- Installation guide (INSTALL.md)
-- Changelog tracking versions
-- Example files and templates
-
-✅ **Cross-Platform Compatibility**
-- Works on Linux, macOS, and Windows
-- Tested on multiple environments
-- Clear platform-specific instructions when needed
-
-✅ **Zero Dependencies** (when possible)
-- Uses native tools and commands
-- No third-party packages required
-- Self-contained and portable
-
-✅ **Production Ready**
-- Tested in real projects
-- Clear success criteria
-- Error handling and validation
-- Graceful degradation
-
-✅ **Well-Structured**
-- Clear naming conventions
-- Organized file structure
-- Versioned releases
-- Active maintenance
+Each item has its own README with install instructions. Navigate to any directory for details.
 
 ---
 
-## 🎯 Skill Categories
+## Contributing
 
-### Context Management
-- **[`/optimize-context`](optimize-context/)** — Smart file exclusion for efficient `/prime` loading
+See [CONTRIBUTING.md](CONTRIBUTING.md) for submission guidelines.
 
-### _More categories coming soon..._
-- Code Quality
-- Testing & Validation
-- Project Setup
-- Documentation
-
----
-
-## 📖 Using Skills
-
-### Basic Usage
-
-After installation, skills are available as slash commands in Claude Code:
-
-```
-/optimize-context create
-/optimize-context analyze
-/optimize-context sync
-```
-
-### Integration with Other Skills
-
-Many skills work together:
-- Use `/optimize-context` before `/prime` for efficient context loading (Note: `/prime` is part of [Cole Medin's PIV Loop](https://github.com/coleam00))
-- Use `/learn` to extract patterns from your workflow
-- Use `/evolve` to cluster patterns into new skills
-
----
-
-## 🤝 Contributing
-
-Have a skill to share? Here's how to contribute:
-
-### Submission Requirements
-
-1. **Complete documentation** (README.md, INSTALL.md, CHANGELOG.md)
-2. **Tested in production** on at least one real project
-3. **Cross-platform verified** (or clearly documented platform restrictions)
-4. **Example files** included where applicable
-5. **Version number** (semantic versioning)
-
-### Submission Process
+### Quick Checklist
 
 1. Fork this repository
-2. Create a new directory for your skill: `your-skill-name/`
-3. Add all required files (see structure below)
-4. Test installation and usage
-5. Submit a pull request with:
-   - Clear description of what the skill does
-   - Token savings or performance benefits (if applicable)
-   - Platform compatibility notes
-   - Any dependencies or requirements
-
-### Required File Structure
-
-```
-your-skill-name/
-├── README.md           # Full documentation
-├── INSTALL.md          # Installation guide
-├── SKILL.md            # Skill definition (Claude Code format)
-├── CHANGELOG.md        # Version history
-├── VERSION             # Current version number
-├── example.*           # Example files (if applicable)
-└── *.md                # Additional reference docs
-```
+2. Add your item in the correct directory (`commands/`, `agents/`, or `skills/`)
+3. Include both the definition file and a README.md
+4. Test in a real project
+5. Submit a pull request
 
 ---
 
-## 📊 Skill Metrics
+## Acknowledgments
 
-| Skill | Version | Downloads* | Avg. Token Savings | Platforms |
-|-------|---------|-----------|-------------------|-----------|
-| `/optimize-context` | 1.0.0 | - | 15K-115K | ✅ ✅ ✅ |
-
-*Download metrics coming soon
-
----
-
-## 🔄 Updates & Versioning
-
-Each skill follows [Semantic Versioning](https://semver.org/):
-- **Major (1.x.x)**: Breaking changes
-- **Minor (x.1.x)**: New features, backward compatible
-- **Patch (x.x.1)**: Bug fixes
-
-Check individual skill CHANGELOGs for update details.
-
-### Staying Updated
-
-```bash
-# Update all skills
-cd shared_skillz
-git pull
-cp -r */ ~/.claude/skills/
-```
+**Built on ideas from:**
+- [Cole Medin's PIV Loop](https://github.com/coleam00) -- Prime, Plan, Execute, Validate methodology
+- [Affaan Mustafa's Everything Claude Code](https://github.com/affaan-m/everything-claude-code) -- Comprehensive Claude Code tooling
+- [The Longform Guide](https://x.com/affaanmustafa) by @affaanmustafa -- Strategic context management patterns
+- [Homunculus](https://github.com/humanplane/homunculus) by humanplane -- Instinct-based learning system
+- [Supabase Agent Skills](https://github.com/supabase/agent-skills) -- PostgreSQL best practices
 
 ---
 
-## 📝 License
+## License
 
-This repository and all skills are provided as-is for personal and team use.
+MIT License -- see [LICENSE](LICENSE) for details.
 
-Individual skills may have their own licenses — check each skill's README.
+Copyright (c) 2026 Nick Martin, PatriotAgentic LLC
 
 ---
-
-## 🌟 Acknowledgments
-
-**Based on:**
-- [Cole Medin's PIV Loop](https://github.com/coleam00) — Prime, Plan, Execute, Validate methodology
-- [Affaan Mustafa's Everything Claude Code](https://github.com/affaan-m) — Comprehensive Claude Code tooling
 
 **Maintained by:** [mindmatter-aia](https://github.com/mindmatter-aia)
-
----
-
-## 📞 Support
-
-- **Issues:** [GitHub Issues](https://github.com/mindmatter-aia/shared_skillz/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/mindmatter-aia/shared_skillz/discussions)
-
----
-
-## 🗺️ Roadmap
-
-### Coming Soon
-- [ ] Code quality skills (linting, formatting)
-- [ ] Testing utilities (coverage, fixtures)
-- [ ] Project scaffolding skills
-- [ ] Documentation generators
-- [ ] Performance profiling skills
-
-### In Progress
-- [x] Context optimization (`/optimize-context`) — ✅ Released v1.0.0
-
----
-
-**Last Updated:** February 10, 2026
-**Skills Count:** 1
-**Total Lines of Code:** 991
+**Issues:** [GitHub Issues](https://github.com/mindmatter-aia/shared_skillz/issues)
+**Last Updated:** March 2026
+**Items Count:** 64 (8 commands + 13 agents + 43 skills)
