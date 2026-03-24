@@ -2,7 +2,7 @@
 
 A curated collection of commands, agents, and skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), Anthropic's official CLI for Claude.
 
-**Total items:** 64 (8 commands + 13 agents + 43 skills)
+**Total items:** 65 (8 commands + 13 agents + 44 skills)
 
 ---
 
@@ -10,7 +10,7 @@ A curated collection of commands, agents, and skills for [Claude Code](https://d
 
 - [Commands](#commands) (8)
 - [Agents](#agents) (13)
-- [Skills](#skills) (43)
+- [Skills](#skills) (44)
 - [Installation](#installation)
 - [Contributing](#contributing)
 - [License](#license)
@@ -105,6 +105,7 @@ Reusable workflow patterns activated as slash commands.
 | [`/code-review`](skills/code-review/) | Technical code review that runs pre-commit |
 | [`/code-review-ecc`](skills/code-review-ecc/) | Comprehensive security and quality review of uncommitted changes |
 | [`/coding-standards`](skills/coding-standards/) | Universal coding standards for TypeScript, JavaScript, React, Node.js |
+| [`/prompt-audit`](skills/prompt-audit/) | Discover, audit, and rewrite LLM prompts using the R/T/S/C/E/N framework |
 | [`/refactor-clean`](skills/refactor-clean/) | Safely identify and remove dead code with test verification |
 
 ### Testing
@@ -265,6 +266,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for submission guidelines.
 - [The Longform Guide](https://x.com/affaanmustafa) by @affaanmustafa -- Strategic context management patterns
 - [Homunculus](https://github.com/humanplane/homunculus) by humanplane -- Instinct-based learning system
 - [Supabase Agent Skills](https://github.com/supabase/agent-skills) -- PostgreSQL best practices
+- [Liam Ottley / Morningside AI](https://www.morningside.ai/) -- R/T/S/C/E/N prompt structure inspiration
 
 ---
 
@@ -279,4 +281,4 @@ Copyright (c) 2026 Nick Martin, PatriotAgentic LLC
 **Maintained by:** [mindmatter-aia](https://github.com/mindmatter-aia)
 **Issues:** [GitHub Issues](https://github.com/mindmatter-aia/shared_skillz/issues)
 **Last Updated:** March 2026
-**Items Count:** 64 (8 commands + 13 agents + 43 skills)
+**Items Count:** 65 (8 commands + 13 agents + 44 skills)
