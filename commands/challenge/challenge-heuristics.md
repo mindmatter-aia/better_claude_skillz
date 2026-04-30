@@ -44,7 +44,7 @@ Lifecycle: Active → seen 3+ becomes Promoted (absorbed into permanent target f
 - **Stack:** generic
 - **Cluster:** Coverage Completeness
 - **Source:** unknown (pre-schema)
-- **Seen:** 1 | **First seen:** 2026-04-03 | **Last seen:** 2026-04-03
+- **Seen:** 2 | **First seen:** 2026-04-03 | **Last seen:** 2026-04-30
 
 ### Cron Frequency Must Match Retention Policy
 - **Check:** When a plan sets a data retention window (e.g., "delete after 2 days") AND creates a recurring cleanup job, verify the job runs frequently enough to enforce the policy. A weekly cron with a 2-day retention means files accumulate for up to 9 days.
@@ -64,7 +64,7 @@ Lifecycle: Active → seen 3+ becomes Promoted (absorbed into permanent target f
 - **Stack:** generic
 - **Cluster:** Plan Discipline
 - **Source:** unknown (pre-schema)
-- **Seen:** 2 | **First seen:** 2026-04-05 | **Last seen:** 2026-04-16
+- **Seen:** 3 | **First seen:** 2026-04-05 | **Last seen:** 2026-04-30
 
 ### Navigation Registration for New Views
 - **Check:** When plan creates a new frontend view/page, verify it also includes steps to register the route in App.tsx AND add a sidebar/nav entry in the navigation component. A view without a nav link is unreachable by users.
@@ -101,10 +101,10 @@ Lifecycle: Active → seen 3+ becomes Promoted (absorbed into permanent target f
 - **Why:** VPS audit plan had a single failure stub for a sequential loop over 2 VPSs. A network timeout on VPS 1 would have prevented VPS 2 from being audited, silently halving coverage.
 - **Applies when:** Plan involves scripts that iterate over multiple independent targets (servers, repos, containers, environments)
 - **Artifact types:** plan, script
-- **Stack:** shell
+- **Stack:** shell, generic
 - **Cluster:** Shell Script Robustness
 - **Source:** unknown (pre-schema)
-- **Seen:** 2 | **First seen:** 2026-04-11 | **Last seen:** 2026-04-16
+- **Seen:** 3 | **First seen:** 2026-04-11 | **Last seen:** 2026-04-30
 
 ### Shell Error Flag Compatibility
 - **Check:** When a plan specifies `set -euo pipefail` for a script that also uses `|| true` or `|| echo` fallbacks, verify that `-e` (errexit) won't conflict. In some contexts, `-e` causes exit before `|| true` can execute (especially in subshells and pipelines).
@@ -115,6 +115,36 @@ Lifecycle: Active → seen 3+ becomes Promoted (absorbed into permanent target f
 - **Cluster:** Shell Script Robustness
 - **Source:** unknown (pre-schema)
 - **Seen:** 2 | **First seen:** 2026-04-11 | **Last seen:** 2026-04-16
+
+### Verify Untested External Syntax Before Committing
+- **Check:** When a plan introduces syntax for an external tool that has no precedent in the workspace (`@import` references, undocumented CLI flags, third-party config keys, hook syntax), include a verification task that empirically tests the syntax in isolation before dependent tasks rely on it. The verification task should produce a yes/no signal and document the fallback strategy.
+- **Why:** An assumed-but-untested syntax becomes a silent failure — the plan completes execution but the integration doesn't actually work. CL-v2 plan originally used `@instincts.md` in CLAUDE.md without verifying Claude Code's import syntax existed; would have shipped a broken auto-load. Fixed by adding T3.4 isolated probe and T3.5 fallback path.
+- **Applies when:** Plan integrates with an external tool's import syntax, configuration DSL, hook system, or any syntax not already used elsewhere in the project
+- **Artifact types:** plan
+- **Stack:** generic
+- **Cluster:** Plan Discipline
+- **Source:** .claude/plans/pl-claude-cl-v2-activation-2026-04-30:00.md
+- **Seen:** 1 | **First seen:** 2026-04-30 | **Last seen:** 2026-04-30
+
+### Stop-Conditions Belong in IMPLEMENT, Not GOTCHA
+- **Check:** When a plan task has a "wait for X / when ready / completion criteria" condition, verify it's stated in the IMPLEMENT field with a concrete check command, not buried in GOTCHA where it can be skimmed past.
+- **Why:** GOTCHA documents risks; IMPLEMENT documents what to do. Executors read IMPLEMENT first and may skip GOTCHA when the task seems routine. CL-v2 migration review's "no `[edit this line]` markers remain" was buried in GOTCHA — the apply step would have silently skipped files without surfacing the incomplete review. Fixed by promoting to IMPLEMENT and adding a hard pre-flight gate.
+- **Applies when:** Plan task has a user-driven gate, a wait-for-condition, or any pre-condition that determines task completion
+- **Artifact types:** plan
+- **Stack:** generic
+- **Cluster:** Plan Discipline
+- **Source:** .claude/plans/pl-claude-cl-v2-activation-2026-04-30:00.md
+- **Seen:** 1 | **First seen:** 2026-04-30 | **Last seen:** 2026-04-30
+
+### Generative Pipelines Need Rollback Paths
+- **Check:** When a plan activates a system that auto-generates content (LLM-driven, observer-driven, agent-driven, ML-driven), verify NOTES or a dedicated task includes a concrete rollback procedure. The procedure must specify: stop signal, archive procedure, blank-state recovery, root-cause-before-restart.
+- **Why:** Generative systems can produce broken output faster than humans review it. Without a documented rollback, recovery becomes an emergency rather than a procedure. CL-v2 plan originally had no rollback for observer-gone-rogue; if observer produced 50 garbage instincts, no clear path to clean state. Fixed by adding 6-step rollback procedure to NOTES with explicit "do not restart until root cause is understood."
+- **Applies when:** Plan activates an LLM-driven, agent-driven, or observer-driven content/data generation pipeline
+- **Artifact types:** plan
+- **Stack:** generic, ai-systems
+- **Cluster:** Generative Pipeline Discipline
+- **Source:** .claude/plans/pl-claude-cl-v2-activation-2026-04-30:00.md
+- **Seen:** 1 | **First seen:** 2026-04-30 | **Last seen:** 2026-04-30
 
 ## Approaching Promotion
 

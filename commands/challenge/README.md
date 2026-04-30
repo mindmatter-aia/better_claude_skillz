@@ -6,11 +6,11 @@ A rigorous self-critique command that pressure-tests plans, prompts, deliverable
 
 ```
 /challenge path/to/file.md                  # full critique with up to 3 iteration cycles
-/challenge                                  # then paste content
-/challenge --quick path/to/file             # single-pass gut-check, no iteration
+/challenge                                  # paste content, OR (no path, no paste) defaults to challenging the last assistant turn
+/challenge --quick path/to/file             # single-pass gut-check, no iteration, lightweight heuristic learning
 /challenge --check [path]                   # audit Challenge Criteria freshness
 /challenge --sync path/to/project           # set up or update Challenge Criteria for one project
-/challenge --sync                           # batch sync all projects with stack clustering
+/challenge --sync                           # batch sync all projects (with cost preview and dry-run option)
 /challenge --prune                          # retire low-activity heuristics with consent
 ```
 
@@ -20,9 +20,10 @@ Modes are mutually exclusive. Priority: `--quick` > `--check` > `--sync` > `--pr
 
 - **Six-dimension critique** — Completeness, Clarity, Logic & Structure, Fit for Purpose, Risk & Blind Spots, The Bar.
 - **Four verdicts** — `SHIP IT` (clean) / `REWORK` (real gaps, fix and retry) / `RETHINK` (approach itself flawed) / `ESCALATE` (3-cycle cap reached and still not shippable — surface for human redesign).
-- **Auto-iteration with hard cap** — Up to 3 cycles on Claude-generated work, applying fixes between rounds. Cap-reached + REWORK emits `ESCALATE` rather than silently giving up.
-- **Heuristic system** — `/challenge` reads `challenge-heuristics.md` and applies relevant entries during the dimensional review (filtered by artifact type and project stack). New systemic findings get extracted as heuristics; entries with `seen: 3+` become promotion candidates that get absorbed into `/plan` or other target files. Stale entries can be retired via `--prune`.
-- **Project-specific Challenge Criteria** — `--sync` analyzes a project's tech stack, business stakes, deployment model, and security posture, then writes tailored review standards into the project's `CLAUDE.md`. Batch mode clusters projects by stack and shares baseline criteria.
+- **Auto-iteration with hard cap** — Up to 3 cycles total on Claude-generated work, applying fixes between rounds. The cap counts every rebuild — REWORK or RETHINK — so the approach can't loop indefinitely. A second RETHINK before the cap also emits `ESCALATE`. Cap-reached while still REWORK emits `ESCALATE` rather than silently giving up.
+- **No-arg default target** — `/challenge` with no path and no paste challenges the last assistant turn in the current session. Useful for gut-checking the response you just got. If the last turn wasn't reviewable (tool result, trivial reply), `/challenge` asks you to provide a path or paste content.
+- **Heuristic system** — `/challenge` reads `challenge-heuristics.md` and applies relevant entries during the dimensional review (filtered by artifact type and project stack). New systemic findings get extracted as heuristics; entries with `seen: 3+` become promotion candidates that get absorbed into `/plan` or other target files. Stale entries can be retired via `--prune`. **`--quick` mode keeps the learning loop alive** — it extracts new heuristics and increments `seen` counts but skips the heavy promotion-candidate prompts.
+- **Project-specific Challenge Criteria** — `--sync` analyzes a project's tech stack, business stakes, deployment model, and security posture, then writes tailored review standards into the project's `CLAUDE.md`. Batch mode clusters projects by stack and shares baseline criteria. **Cost-aware batches** — before analysis, `--sync` shows a token estimate and offers a dry-run; defaults to dry-run when N > 10 projects.
 - **Freshness tracking** — `--check` reads a `<!-- last-updated: YYYY-MM-DD -->` metadata comment in the criteria block (written by `--sync`) to score staleness as Fresh / Drifting / Stale.
 - **Code-aware** — Source code artifacts dispatch a language-specific reviewer agent (Python / Go / TypeScript) concurrently with the dimensional critique; security-sensitive code additionally invokes a security-reviewer agent.
 - **Final Challenge Report** — Always produced. Includes iteration summary, improvements made across cycles, remaining findings with severity, and a "Your Call" section that returns control to you.
