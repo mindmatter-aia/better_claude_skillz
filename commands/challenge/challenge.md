@@ -20,7 +20,8 @@ This command forces that self-critique so work reaches "best I can do" quality b
 
 - `/challenge path/to/file.md` — challenge a specific file
 - `/challenge` then paste content — challenge something from outside the workspace
-- After any command that produces output — run `/challenge` to gut-check it
+- `/challenge` (no path, no paste) — defaults to challenging the last Claude assistant turn in the current session. If the last turn was a tool result or a trivial confirmation rather than a substantive output, ask: "Nothing reviewable in the last turn. Paste the content or provide a path."
+- After any command that produces output — run `/challenge` to gut-check it (uses the no-arg default above)
 - `/challenge --quick path/to/file` — single-pass gut-check, compressed report, no iteration cycles
 - `/challenge --check [path]` — audit criteria freshness without rewriting
 - `/challenge --sync path/to/project` — set up or update Challenge Criteria for a specific project
@@ -53,7 +54,12 @@ If the argument includes `--quick`, run a compressed single-pass evaluation. No 
 {SHIP IT / REWORK / RETHINK — with one sentence of reasoning}
 ```
 
-5. Do not iterate. Do not run Step 8b (agent review) or Step 10 (heuristic extraction). The quick mode is a gut-check, not a full review.
+5. Do not iterate. Do not run Step 8b (agent review). The quick mode is a gut-check, not a full review.
+6. **Lightweight heuristic extraction.** If the artifact is a repeatable type (plan, skill, agent, prompt, workflow, script — same detection rules as Step 10), run **Step 10 sub-steps 1-4 only**:
+   - Review the findings, filter for systemic issues, increment `seen` / add new entries to `~/.claude/challenge-heuristics.md`, and refresh the Approaching Promotion section.
+   - **Skip sub-step 5** (promotion candidate presentation) — that's the expensive part with file edits and user prompts. Quick mode shouldn't ask the user to make decisions about distant target files.
+   - **Skip sub-step 6** (Heuristics Update report) — quick mode's compressed report has no place for it. Heuristic counts get rolled into a one-line trailer if anything was added: `Heuristics: +{N} new, +{N} reinforced.`
+   This keeps the learning loop alive in quick mode without bloating it.
 
 ---
 
@@ -130,6 +136,23 @@ If the argument is `--sync`, switch to **criteria-sync mode** instead of critiqu
    c. Skip if the directory path contains `/archive/` or `/archived/` (completed work).
    d. If a `.primeignore` exists in the candidate, note it — this project has context optimization configured, which signals active maintenance.
 4. Present the discovered project list. Ask the user to confirm which projects to sync (all, or a subset).
+4b. **Cost estimate.** Before proceeding to analysis, present a budget estimate so the user can size the operation:
+
+   ```
+   Sync cost estimate
+   - Projects to analyze: {N}
+   - Per-project context: ~5K tokens (CLAUDE.md + structure scan + git log + criteria draft)
+   - Estimated total: ~{N × 5}K tokens
+   - Mode: [Live write / Dry run (analyze and present, don't write)]
+
+   Proceed? (yes / dry-run first / cancel)
+   ```
+
+   - **yes** — proceed to step 5 with live writes (subject to step 8 approval)
+   - **dry-run first** — proceed through analysis and presentation but skip step 9 writes; user can re-invoke `--sync` after reviewing
+   - **cancel** — abort
+
+   Default to dry-run when N > 10 projects (large batches deserve preview-first as the default).
 5. **Stack clustering.** Before analyzing individually, group confirmed projects by tech stack signature (language + framework + data layer). For each cluster of 2+ projects:
    - Identify shared concerns (e.g., all Python/FastAPI/SQLite projects share WAL concurrency concerns)
    - Draft shared baseline criteria for the cluster
@@ -333,11 +356,13 @@ Is this the best you can do? {Direct yes/no with reasoning}
 ```
 
 7. **If the work was produced by Claude in this session** (a plan, a prompt, a draft — something Claude wrote):
-   - If verdict is REWORK: apply all fixes, then re-run the challenge evaluation on the improved version.
-   - If verdict is RETHINK: explain the fundamental issue, propose a revised approach, get the user's input before rebuilding.
+   - If verdict is REWORK: apply all fixes, then re-run the challenge evaluation on the improved version. **Counts as one cycle.**
+   - If verdict is RETHINK: explain the fundamental issue, propose a revised approach, get the user's input before rebuilding. **A user-approved rebuild after RETHINK counts as one cycle** (same as REWORK). The cap doesn't reset just because the approach changed.
    - If verdict is SHIP IT: move to step 9.
-   - **Hard cap: 3 cycles maximum** (initial critique + up to 2 rework passes). After cycle 3, stop iterating regardless of verdict. If it's not there in 3 rounds, the approach needs rethinking, not more polishing.
+   - **Hard cap: 3 cycles maximum total** (initial critique + up to 2 rebuild passes of any kind — REWORK, RETHINK-then-rebuild, or any mix). After cycle 3, stop iterating regardless of verdict. If it's not there in 3 rounds, the approach needs human redesign, not more iteration.
+   - **Max 1 RETHINK-rebuild per session.** A second RETHINK verdict (after the first rebuild) is the system telling you the approach is fundamentally wrong. Don't loop on RETHINK — escalate.
    - **Cap-reached + still REWORK → emit ESCALATE in the Final Report.** This signals "polishing won't fix this, the approach itself needs human redesign." Distinct from RETHINK, which is an in-cycle judgment; ESCALATE is the post-cap exit signal.
+   - **Second RETHINK before cap → also emit ESCALATE.** If the rebuilt version is itself diagnosed as RETHINK, the system has reached the limit of what self-iteration can do.
 
 8. **If the work was pasted in or is external** (something the user wrote, a client deliverable, third-party content):
    - Present the challenge report as-is. The user decides what to do with the feedback.
